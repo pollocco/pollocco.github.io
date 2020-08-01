@@ -1,0 +1,1050 @@
+<!DOCTYPE =html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1, shrink-to-fit=no"
+/>
+<title>HW6 Primer</title>
+<!--Tomorrow Night Eighties theme for highlight.js-->
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/tomorrow-night-eighties.min.css"
+integrity="sha512-P1mgxhtj4xaZLIayPCEZrkFH/CsdeVvax90YG1aKpJHj0iZdKDIP6TUd1/OJitWMJScXecspQ0UGzO6dEq5IaQ=="
+crossorigin="anonymous"
+/>
+<!--Bootstrap 4.5.0 https://getbootstrap.com/-->
+<link
+rel="stylesheet"
+href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+crossorigin="anonymous"
+/>
+<!--Highlight.js https://highlightjs.org-->
+<link
+rel="stylesheet"
+href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css"
+/>
+<!--Boostrap Table of Contents plugin https://afeld.github.io/bootstrap-toc/-->
+<link
+rel="stylesheet"
+href="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.css"
+/>
+<link rel="stylesheet" href="style.css" />
+<style>
+.markdown-body {
+box-sizing: border-box;
+min-width: 200px;
+max-width: 980px;
+margin: 0 auto;
+padding: 45px;
+}
+
+@media (max-width: 767px) {
+.markdown-body {
+  padding: 15px;
+}
+}
+</style>
+</head>
+<body data-spy="scroll" data-target="#toc" style="position: relative;">
+<div class="container">
+<div class="row">
+<div class="col-sm-2">
+  <!--Table of Contents plugin for Bootstrap https://afeld.github.io/bootstrap-toc/-->
+  <nav id="toc" data-toggle="toc" class="sticky-top"></nav>
+</div>
+<div class="col-sm-10">
+  <div class="markdown-body">
+    <h1 id="a-primer-for-hw-6">A Primer for HW 6</h1>
+    <p>
+      HW Assignment 6: Database Interactions and UI is a bit of a doozy,
+      and there&#39;s a lot going on here that&#39;s going to really
+      test your knowledge of what you&#39;ve learned so far. Hopefully
+      this document can serve to close a few gaps between
+      <em>what you know</em> and <em>what you should know</em> in order
+      to finish this assignment smoothly.
+    </p>
+    <p>
+      <strong
+        >Most of this is review and a more in-depth look at things
+        we&#39;ve already covered -- but a bit of it is new things that
+        will help get the ball rolling and provide clarification on how
+        to approach this. All of this is relevant to the assignment and
+        worth reviewing, but if you&#39;re short on time I&#39;d
+        recommend taking a look at &quot;Playing the Callback Game&quot;
+        section, as there&#39;s a lot of great resources linked there
+        that will help you wrap your head around this.</strong
+      >
+    </p>
+    <p>
+      Ultimately, this assignment is an exercise in planning ahead and
+      giving yourself both time to learn the concepts at play, and time
+      to make mistakes and troubleshoot.
+      <em
+        >This guide isn&#39;t necessarily binding in terms of how
+        you&#39;re allowed to meet the requirements of HW 6. It&#39;s
+        just arguably the most straightforward way, and uses the
+        concepts we&#39;ve been working with this quarter.</em
+      >
+    </p>
+
+    <h1 id="the-anatomy-of-an-express-program" class="js-toc-content">
+      The Anatomy of an Express Program
+    </h1>
+    <h3
+      id="or-what-is-this-all-the-boilerplate-code-in-our-express-servers-doing-"
+    >
+      or What is this all the boilerplate code in our Express servers
+      doing?
+    </h3>
+    <p>
+      Express calls itself a &quot;minimalist web framework&quot;, which
+      is what everyone calls everything nowadays, but we can also think
+      of it as two-in-one <strong>server</strong> and
+      <strong>API</strong> framework. Why does this matter? For Homework
+      6, both a server and an API are more-or-less necessary to meet the
+      requirements. As a server, your Express app can serve the webpages
+      and static files, and as an API, your Express app can respond to
+      requests made by your client-side asynchronous JavaScript.
+    </p>
+    <h3 id="breaking-down-the-mysterious-boilerplate">
+      Breaking Down the Mysterious Boilerplate
+    </h3>
+    <p>
+      Okay, we&#39;ll take this line-by-line.
+      <strong
+        >All of the code blocks here are in order, and the full example
+        is at the end.</strong
+      >
+    </p>
+    <h2 id="initial-setup">Initial Setup</h2>
+    <pre><code><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>); <span class="hljs-comment">// Our Express package, that we got from NPM</span>
+<span class="hljs-keyword">var</span> mysql = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./dbcon.js'</span>); <span class="hljs-comment">// Our database login </span>
+<span class="hljs-keyword">var</span> bodyParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'body-parser'</span>); <span class="hljs-comment">// body-parser parses the body of POST requests</span>
+</code></pre>
+    <p>
+      <code>require()</code> is used to bring in our dependencies. As
+      seen here, they can either be NPM packages, or they can be scripts
+      of our own, like <code>dbcon.js</code>.
+    </p>
+    <pre><code><span class="hljs-attribute">var app</span> = express();
+</code></pre>
+    <p>This initializes the Express server.</p>
+    <pre><code><span class="hljs-attribute">var handlebars</span> = require(<span class="hljs-string">'express-handlebars'</span>).create({defaultLayout:<span class="hljs-string">'main'</span>});
+</code></pre>
+    <p>
+      Above, we import Express-Handlebars (for our purposes,
+      Handlebars), and sets the default layout to <code>main</code>,
+      which should be located at
+      <code>/views/layouts/main.handlebars</code> (Essentially, this
+      means all pages, by default, will be wrapped in whatever
+      <code>main.handlebars</code> contains. The other .handlebars
+      files, which should be kept in <code>/views</code>, will be
+      inserted into the <code>{{{body}}}</code> tag of
+      <code>main.handlebars</code>. To avoid confusion with the
+      boilerplate code blocks, see
+      <code>main.handlebars</code>
+      <a
+        href="https://raw.githubusercontent.com/luyaozh/CS290/master/CS290-Server-Side-Examples-master/hello-express/views/layouts/main.handlebars"
+        >here</a
+      >).
+    </p>
+    <h4 id="setting-up-body-parser-">
+      Setting up <code>body-parser</code>
+    </h4>
+    <p>
+      The next two lines are setting up the body-parser plugin (which we
+      imported as <code>bodyParser</code>), and tells
+      <code>app</code> (our Express server) to use
+      <code>bodyParser</code>&#39;s JSON and
+      <code>x-www-form-urlencoded</code> parsing tools.
+    </p>
+    <pre><code class="lang-js"><span class="hljs-selector-tag">app</span><span class="hljs-selector-class">.use</span>(<span class="hljs-selector-tag">bodyParser</span><span class="hljs-selector-class">.json</span>()); 
+<span class="hljs-selector-tag">app</span><span class="hljs-selector-class">.use</span>(<span class="hljs-selector-tag">bodyParser</span><span class="hljs-selector-class">.urlencoded</span>({<span class="hljs-attribute">extended</span>: false}));
+</code></pre>
+    <p>
+      Once this is done, we&#39;ll be able to receive incoming POST
+      requests with a <code>Content-Type</code> of either
+      <code>application/json</code> or
+      <code>application/x-www-form-urlencoded</code>. (Info about that
+      <code>{extended: false}</code> option
+      <a
+        href="https://github.com/expressjs/body-parser#bodyparserurlencodedoptions"
+        >here</a
+      >.)
+    </p>
+    <h4 id="the-public-folder">The <code>public</code> Folder</h4>
+    <p><em>This upcoming line is important for this assignment:</em></p>
+    <pre><code class="lang-javascript">app.<span class="hljs-keyword">use</span>(express.<span class="hljs-keyword">static</span>('<span class="hljs-keyword">public</span>'));
+</code></pre>
+    <p>
+      This tells Express to serve static files (for our purposes: CSS,
+      JavaScript, images) from a folder named <code>public</code> in our
+      project&#39;s root directory, and serve them
+      <em>at the root URL of the server</em>, i.e.
+      <code>&#39;/&#39;</code>. So if we&#39;re looking for
+      <code>myScript.js</code> inside of public, we&#39;ll link to it as
+      <code
+        >&lt;script
+        src=&quot;/myScript.js&quot;&gt;&lt;/script&gt;</code
+      >
+      inside of any Handlebars files or HTML files that we serve.
+    </p>
+    <h4 id="setting-the-templating-engine">
+      Setting the Templating Engine
+    </h4>
+    <p>
+      These two lines set our templating engine to Handlebars, and our
+      view engine as well:
+    </p>
+    <pre><code><span class="hljs-selector-tag">app</span><span class="hljs-selector-class">.engine</span>(<span class="hljs-string">'handlebars'</span>, handlebars.engine);
+<span class="hljs-selector-tag">app</span><span class="hljs-selector-class">.set</span>(<span class="hljs-string">'view engine'</span>, <span class="hljs-string">'handlebars'</span>);
+</code></pre>
+    <h4 id="setting-the-port">Setting the Port</h4>
+    <pre><code>app.set(<span class="hljs-string">'port'</span>, <span class="hljs-built_in">process</span>.argv[<span class="hljs-number">2</span>]);
+</code></pre>
+    <p>
+      This determines which port our server will run on. Here, the port
+      is set to <code>process.argv[2]</code>, which means the third
+      argument (because 0, 1, 2) given to the process in the command
+      line when started will determine the port, i.e.
+      <code>node hw6.js 1234</code>.
+    </p>
+    <h2 id="routes">Routes</h2>
+    <h5 id="get-request">GET Request</h5>
+    <p>
+      Now we can start writing our routes. Here&#39;s an example route
+      for GET:
+    </p>
+    <pre><code>app.get(<span class="hljs-string">'/'</span>,function(req, res, next){ 
+  var <span class="hljs-built_in">context</span>  = {}<span class="hljs-comment">;</span>
+  <span class="hljs-built_in">context</span>.hello  =  <span class="hljs-string">"Welcome to Wayne's World!"</span><span class="hljs-comment">;</span>
+  res.render(<span class="hljs-string">'home'</span>,  <span class="hljs-built_in">context</span>)<span class="hljs-comment">;</span>
+})<span class="hljs-comment">;</span>
+</code></pre>
+    <p>
+      <code>app.get(&#39;/&#39;, function(req, res, next)</code> is
+      telling us three things: this handler is for a GET request, that
+      request was sent to our root URL (<code>&#39;/&#39;</code>), and
+      that we&#39;ll respond to that request with a function that
+      permits three parameters:
+    </p>
+    <ol>
+      <li><code>req</code>, the request from the client,</li>
+      <li>
+        <code>res</code>, our Express server&#39;s response to that
+        request, and
+      </li>
+      <li>
+        <code>next</code>, which is actually a function, used by
+        invoking <code>next()</code> -- it tells our server to call the
+        next middleware function or handler in the
+        <a href="https://i.stack.imgur.com/nrVJQ.png"
+          >Express.js middleware stack</a
+        >, if it exists. You&#39;ll only want to use this if you
+        <em>actually</em> want to pass control off by running the next
+        function in line. A common reason for doing this is in the event
+        of an error, where the top-most route for that path and HTTP
+        verb (e.g. GET, POST) can&#39;t finish its execution, so it
+        calls <code>next(err)</code> (<code>err</code> being the error
+        message) so the situation can default to the appropriate
+        <em>error</em> route handler. Including
+        <code>next()</code> accidentally can wreak some real havoc and
+        lead to confusing behavior if you&#39;re not aware of what it
+        does. Here&#39;s
+        <a
+          href="http://expressjs.com/en/4x/api.html#middleware-callback-function-examples"
+          >some examples</a
+        >
+        of <code>next()</code> in action.
+      </li>
+    </ol>
+    <p>
+      We also have the <code>context</code> object, which is how we
+      store the variables we&#39;d like to pass over to Handlebars. Once
+      we&#39;re done assigning properties to <code>context</code>, such
+      as <code>context.hello</code>, we can go ahead and use
+      <code>res.render(&#39;home&#39;, context);</code> to render
+      <code>home.handlebars</code> with <code>context</code> as the
+      object Handlebars will pull values from.
+    </p>
+    <h5 id="post-request">POST Request</h5>
+    <p>All right, now we can look at an example route for POST:</p>
+    <pre><code>app.post(<span class="hljs-string">'/'</span>,  <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span></span>{ 
+  <span class="hljs-keyword">if</span>(req.body.wayne){
+      <span class="hljs-keyword">var</span> wayne = req.body.wayne
+      res.send(<span class="hljs-string">"Party on Garth!"</span>)
+  } <span class="hljs-keyword">else</span> {
+      res.send(<span class="hljs-string">"No Stairway! Denied!"</span>)
+  }
+});
+</code></pre>
+    <p>
+      It starts the same as the GET request above, albeit with
+      <code>app.post</code> instead of <code>app.get</code>.
+    </p>
+    <p>
+      Within the function itself, we now have this variable called
+      <code>req.body</code>. That&#39;s what the client sent our Express
+      server in their POST request, and it&#39;s all parsed and ready to
+      go thanks to <code>bodyParser</code>. The specific variables sent
+      to us in the POST request, such as <code>wayne</code>, are
+      available to us as properties of <code>req.body</code>, so we can
+      access them as such, using <code>req.body.wayne</code>, or,
+      alternatively, <code>req.body[&quot;wayne&quot;]</code>.
+    </p>
+    <p>
+      We also have <code>req.send</code>, which according to the
+      <a href="https://expressjs.com/en/api.html#res.sendFile"
+        >Express 4.x documentation</a
+      >, can be used to send &quot;a <code>Buffer</code> object, a
+      <code>String</code>, an object, or an <code>Array</code>.&quot;
+      This is how we&#39;ll send information back to the client.
+    </p>
+    <h2 id="error-handlers-and-server-launch">Error Handlers and Server Launch</h2>
+    <p>
+      <strong
+        >The remaining code in these two sections goes at the end of
+        your Express app:</strong
+      >
+    </p>
+    <h4 id="error-handlers">Error Handlers</h4>
+    <pre><code>app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req,res)</span></span>{ 
+  res.<span class="hljs-keyword">status</span>(<span class="hljs-number">404</span>);
+  res.render(<span class="hljs-string">'404'</span>);
+});
+
+app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err,  req,  res,  next)</span></span>{
+  console.error(err.stack);
+  res.<span class="hljs-keyword">status</span>(<span class="hljs-number">500</span>);
+  res.render(<span class="hljs-string">'500'</span>);
+});
+</code></pre>
+    <p>
+      These functions are here to catch <code>404: Not Found</code> and
+      <code>500: Internal Server Error</code> codes. These functions
+      return the error status, and then render the 404 and 500 pages,
+      respectively. <em>The important thing to remember</em> is that
+      <code>404.handlebars</code> and
+      <code>500.handlebars</code> don&#39;t exist on their own -- there
+      needs to be those files, with those names, in the
+      <code>views</code> folder, or else they won&#39;t appear.
+    </p>
+    <h4 id="starting-the-server">Starting the Server</h4>
+    <p>All right, now we&#39;re at the <em>very</em> end:</p>
+    <pre><code>app.listen(app.<span class="hljs-keyword">get</span>(<span class="hljs-string">'port'</span>),  <span class="hljs-function"><span class="hljs-keyword">function</span></span>(){
+  console.log(<span class="hljs-string">'Express started on http://localhost:'</span>  +  app.<span class="hljs-keyword">get</span>(<span class="hljs-string">'port'</span>)  +  
+  <span class="hljs-string">'; press Ctrl-C to terminate.'</span>);
+});
+</code></pre>
+    <p>
+      This tells our Express server to <code>app.get</code> the port
+      that we <code>app.set</code> at the beginning of our script. Once
+      this is done, we print a friendly message to the console and call
+      it a day.
+    </p>
+    <h2 id="full-boilerplate-example">Full Boilerplate Example</h2>
+    <pre><code><span class="hljs-comment">// INITIAL SETUP</span>
+<span class="hljs-keyword">var</span>  express  =  <span class="hljs-keyword">require</span>(<span class="hljs-string">'express'</span>);        <span class="hljs-comment">// Our Express package, that we got from NPM</span>
+<span class="hljs-keyword">var</span>  mysql  =  <span class="hljs-keyword">require</span>(<span class="hljs-string">'./dbcon.js'</span>);       <span class="hljs-comment">// Our database login </span>
+<span class="hljs-keyword">var</span>  bodyParser  =  <span class="hljs-keyword">require</span>(<span class="hljs-string">'body-parser'</span>);     <span class="hljs-comment">// body-parser parses the body of POST requests</span>
+
+<span class="hljs-keyword">var</span> app  =  express();
+
+<span class="hljs-keyword">var</span>  handlebars  =  <span class="hljs-keyword">require</span>(<span class="hljs-string">'express-handlebars'</span>).create({defaultLayout:<span class="hljs-string">'main'</span>});
+
+<span class="hljs-comment">// SETTING UP BODY-PARSER</span>
+app.<span class="hljs-keyword">use</span>(bodyParser.json()); 
+app.<span class="hljs-keyword">use</span>(bodyParser.urlencoded({extended:  <span class="hljs-keyword">false</span>}));
+
+<span class="hljs-comment">// THE PUBLIC FOLDER</span>
+app.<span class="hljs-keyword">use</span>(express.<span class="hljs-keyword">static</span>(<span class="hljs-string">'public'</span>)); 
+
+<span class="hljs-comment">// SETTING THE TEMPLATING ENGINE</span>
+app.engine(<span class="hljs-string">'handlebars'</span>,  handlebars.engine);
+app.set(<span class="hljs-string">'view engine'</span>,  <span class="hljs-string">'handlebars'</span>);
+
+<span class="hljs-comment">// SETTING THE PORT</span>
+app.set(<span class="hljs-string">'port'</span>,  process.argv[<span class="hljs-number">2</span>]);
+
+<span class="hljs-comment">// ROUTES</span>
+
+<span class="hljs-comment">//   GET REQUEST</span>
+app.get(<span class="hljs-string">'/'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span></span>{ 
+  <span class="hljs-keyword">var</span> context  = {};
+  context.hello  =  <span class="hljs-string">"Welcome to Wayne's World!"</span>;
+  res.render(<span class="hljs-string">'home'</span>,  context);
+});
+
+<span class="hljs-comment">//   POST REQUEST</span>
+app.post(<span class="hljs-string">'/'</span>,  <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span></span>{ 
+  <span class="hljs-keyword">if</span>(req.body.wayne){
+      <span class="hljs-keyword">var</span> wayne = req.body.wayne
+      res.send(<span class="hljs-string">"Party on Garth!"</span>)
+  } <span class="hljs-keyword">else</span> {
+      res.send(<span class="hljs-string">"No Stairway! Denied!"</span>)
+  }
+});
+
+<span class="hljs-comment">// THE REMAINDER OF THIS CODE GOES AT THE BOTTOM</span>
+
+<span class="hljs-comment">// ERROR HANDLERS</span>
+app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req,res)</span></span>{ 
+  res.status(<span class="hljs-number">404</span>);
+  res.render(<span class="hljs-string">'404'</span>);
+});
+
+app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err,  req,  res,  next)</span></span>{
+  console.error(err.stack);
+  res.status(<span class="hljs-number">500</span>);
+  res.render(<span class="hljs-string">'500'</span>);
+});
+
+<span class="hljs-comment">// STARTING THE SERVER</span>
+app.listen(app.get(<span class="hljs-string">'port'</span>),  <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+  console.log(<span class="hljs-string">'Express started on http://localhost:'</span>  +  app.get(<span class="hljs-string">'port'</span>)  +  
+  <span class="hljs-string">'; press Ctrl-C to terminate.'</span>);
+});
+</code></pre>
+    <h1
+      id="another-look-at-asynchronous-operations"
+      class="js-toc-content"
+    >
+      Another Look at Asynchronous Operations
+    </h1>
+    <h4
+      id="what-exactly-is-client-side-asynchronous-javascript-and-isn-t-that-essentially-just-xmlhttprequest-"
+    >
+      What <em>exactly</em> is client-side asynchronous JavaScript, and
+      isn&#39;t that essentially just XMLHttpRequest?
+    </h4>
+    <p>
+      <strong>Asynchronous JavaScript</strong>, also commonly called
+      <strong>AJAX</strong> (Asynchronous JavaScript and XML), is
+      JavaScript that uses a callback function (read: event listener) so
+      that other code can run while your program waits for a response.
+      <strong>Client-side</strong> just means that it&#39;s running in
+      the user&#39;s browser, so their computer is the one doing all the
+      work (unlike, say, server-side JavaScript, where the processing
+      takes place on the computer running the server). Any JavaScript
+      that loads with a webpage can be considered client-side. Homework
+      4 is one example of this.
+    </p>
+    <p>
+      <em>AJAX should not be confused with just any HTTP request.</em>
+      Here&#39;s what I mean:
+    </p>
+    <p>
+      <strong>XMLHttpRequest</strong> is simply a means of making HTTP
+      requests, and XMLHttpRequest can be used to make
+      <em>both</em> synchronous <em>and</em> asynchronous requests,
+      <strong>which leads us to a common pitfall</strong>:
+    </p>
+    <p>This is <strong>not</strong> asynchronous JavaScript:</p>
+    <pre><code><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> XMLHttpRequest();
+req.open(<span class="hljs-string">"GET"</span>, <span class="hljs-string">"/"</span>, <span class="hljs-literal">false</span>);
+req.send(<span class="hljs-literal">null</span>);
+<span class="hljs-keyword">if</span>(req.status &gt;= <span class="hljs-number">200</span> &amp;&amp; req.status &lt; <span class="hljs-number">400</span>){
+  <span class="hljs-keyword">var</span> response = <span class="hljs-built_in">JSON</span>.parse(req.responseText);
+  <span class="hljs-built_in">console</span>.log(response);
+  <span class="hljs-comment">// everything that uses the response goes here</span>
+} <span class="hljs-keyword">else</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Error! "</span> + req.statusText);
+}
+</code></pre>
+    <p>
+      The reason this <strong>isn&#39;t</strong> asynchronous is
+      because, the way it&#39;s written, this program will
+      <em>stop everything</em> at <code>req.send(null)</code> and wait
+      for the server/API to respond. This is considered bad for the user
+      experience, and almost all website don&#39;t do this anymore.
+    </p>
+    <p>This is <strong>also not</strong> asynchronous JavaScript:</p>
+    <pre><code><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> XMLHttpRequest();
+req.open(<span class="hljs-string">"GET"</span>,<span class="hljs-string">"/"</span>, <span class="hljs-literal">false</span>);       <span class="hljs-comment">// async == false</span>
+req.send(<span class="hljs-literal">null</span>)                    <span class="hljs-comment">// request is sent before callback is attached</span>
+req.addEventListener(<span class="hljs-string">"load"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">if</span>(req.status &gt;= <span class="hljs-number">200</span> &amp;&amp; req.status &lt; <span class="hljs-number">400</span>){
+      <span class="hljs-keyword">var</span> response = <span class="hljs-built_in">JSON</span>.parse(req.responseText);
+      <span class="hljs-built_in">console</span>.log(response);
+  } <span class="hljs-keyword">else</span> {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Error! "</span> + req.statusText);
+  }
+})
+</code></pre>
+    <p>
+      As you can see from the comments, there&#39;s two reasons why this
+      <strong>doesn&#39;t work</strong>: the request is opened with
+      <code>async</code> set to <code>false</code>, so it&#39;s a
+      non-starter, <em>but also</em> the request is being sent before
+      the callback is attached. Without a callback established
+      beforehand, <code>req</code> won&#39;t know that you&#39;re asking
+      it to detach from execution of the program and
+      <em>call back</em> when the server has responded. This would be
+      the case even if <code>async</code> had been set to
+      <code>true</code>, so be careful that you have all of these
+      elements in place to be properly implementing AJAX.
+    </p>
+    <p>
+      This, finally, is a <strong>correct way</strong> of using
+      asynchronous JavaScript:
+    </p>
+    <pre><code><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> XMLHttpRequest();
+req.open(<span class="hljs-string">"GET"</span>,<span class="hljs-string">"/"</span>, <span class="hljs-literal">true</span>);       <span class="hljs-comment">// async == true</span>
+req.addEventListener(<span class="hljs-string">"load"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+  <span class="hljs-keyword">if</span>(req.status &gt;= <span class="hljs-number">200</span> &amp;&amp; req.status &lt; <span class="hljs-number">400</span>){
+      <span class="hljs-keyword">var</span> response = <span class="hljs-built_in">JSON</span>.parse(req.responseText);
+      <span class="hljs-built_in">console</span>.log(response);
+      <span class="hljs-comment">// everything that uses the response goes here</span>
+  } <span class="hljs-keyword">else</span> {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Error! "</span> + req.statusText);
+  }
+})
+req.send(<span class="hljs-literal">null</span>);    <span class="hljs-comment">// request is sent *after* callback is attached to req.</span>
+</code></pre>
+    <p>
+      The request has been opened (with <code>async</code> set to
+      <code>true</code>), the event listener has been attached, and
+      finally, the request can be sent to the server/API and
+      <code>req</code> will hand over control of the program to whatever
+      is next until <code>&quot;load&quot;</code> happens.
+      <strong
+        >Doing it this way (if you choose to utilize
+        <code>XMLHttpRequest</code>) will prevent you from losing the
+        20% on Homework 6 for not implementing AJAX.</strong
+      >
+    </p>
+    <p>
+      <em
+        >Finally, remember that all statements and functions that
+        require information from a specific response have to go inside
+        of that request&#39;s callback function.</em
+      >
+      This was easier to remember when we were only doing one or two
+      things after making a request, but this assignment is much bigger.
+      You&#39;ll have to do a bit of planning to make this all work out.
+    </p>
+    <h1
+      id="that-s-great-but-how-do-i-start-the-project-"
+      class="js-toc-content"
+    >
+      That&#39;s great, but how do I start the project?
+    </h1>
+    <p>
+      <strong
+        >Setting up your project using Express-Handlebars is likely the
+        most straightforward way to get out the door.</strong
+      >
+      My primary motivation for recommending Handlebars is this:
+    </p>
+    <ol>
+      <li>
+        It&#39;s quick, and your past assignments provide a
+        readily-accessible skeleton code with which to get started. The
+        less time you spend getting to the starting line, the better.
+      </li>
+      <li>
+        Having your webpage on the same server as the API will allow you
+        to avoid cross-origin (CORS) errors.
+      </li>
+    </ol>
+    <p>
+      <strong
+        >If you go this route, it&#39;s important to note that, due to
+        the requirements of HW 6, the templating features of Handlebars
+        will largely have to be ignored.</strong
+      >
+      In order for Handlebars to change the contents of a webpage, it
+      requires a page refresh -- and that&#39;s off limits for our
+      purposes. The client-side JavaScript, in this case, should be
+      responsible for building the workout table -- much like in HW 4.
+      My recommendation is to have the Handlebars template contain all
+      the elements of the page that don&#39;t change, and leave the rest
+      up to DOM manipulation. Handlebars templates are compiled into
+      HTML, so the DOM can be accessed and manipulated just like any
+      other HTML page.
+    </p>
+    <h4 id="implementation">Implementation</h4>
+    <p>
+      In order to go this route, we need to be able to serve JavaScript
+      to a Handlebars template, which will take one additional step. We
+      can serve static JavaScript files using our Express-Handlebars
+      setup, by creating and informing Express about a
+      <code>public</code> folder (see
+      <a href="#the-public-folder">the public folder</a>).
+    </p>
+    <h4
+      id="regarding-communication-between-javascript-and-the-express-server"
+    >
+      Regarding Communication Between JavaScript and the Express Server
+    </h4>
+    <p>
+      <strong>Important:</strong> While the Express server can handle
+      parsing and formatting requests and responses automatically using
+      <code>body-parser</code> and <code>res.send</code>, respectively,
+      you&#39;ll have to use functions like <code>JSON.parse</code> and
+      <code>JSON.stringify</code> in order to properly parse and format
+      requests and responses on the client-side. <em>Also</em>, you need
+      to set the proper <code>Content-Type</code> request header that
+      specifies what you&#39;re sending.
+      <strong
+        >When done incorrectly, this often results in a
+        <code>Unexpected token X in JSON at position 1</code>
+        error</strong
+      >. Here&#39;s an example of both of those requirements:
+    </p>
+    <pre><code>req.open(<span class="hljs-string">"POST"</span>,  <span class="hljs-string">"/"</span>);               <span class="hljs-comment">// open up a POST request to my Express server</span>
+req.setRequestHeader(<span class="hljs-string">'Content-Type'</span>,  <span class="hljs-string">'application/json'</span>); <span class="hljs-comment">// set Content-Type header to JSON</span>
+req.addEventListener(<span class="hljs-string">'load'</span>,  <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{                  <span class="hljs-comment">// callback function</span>
+  <span class="hljs-keyword">if</span>(req.status  &gt;=  <span class="hljs-number">200</span>  &amp;&amp;  req.status  &lt;  <span class="hljs-number">400</span>){
+      <span class="hljs-keyword">var</span> response  =  <span class="hljs-built_in">JSON</span>.parse(req.responseText); <span class="hljs-comment">// parse the response</span>
+      doSomething(response);
+  } <span class="hljs-keyword">else</span>{
+      popUpMessage(<span class="hljs-string">"Hmm. Something went wrong. Error: "</span>  +  req.statusText);
+      <span class="hljs-keyword">return</span>;
+  }
+})
+req.send(<span class="hljs-built_in">JSON</span>.stringify(jsonObj));   <span class="hljs-comment">// stringify my request body and send!</span>
+</code></pre>
+    <h2 id="a-reasonable-plan">A Reasonable Plan</h2>
+    <p>Allow me to summarize the recommended game plan here:</p>
+    <ol>
+      <li>
+        <strong>The Server</strong> - Express, of course. We can set up
+        the Express server quickly and easily now that we have our past
+        assignments to reference. Express will act as both the server
+        and the API in this instance, and both can be accomplished
+        within the same script.
+      </li>
+      <li>
+        <strong>The Client</strong> - While one might first imagine
+        it&#39;s the Handlebars page being served by our Express server,
+        <strong
+          >the true client is the JavaScript <em>within</em> that
+          Handlebars page that&#39;s making asynchronous calls to our
+          Express server.</strong
+        >
+        The Handlebars page is the GUI, so to speak, and serves as the
+        point of communication between the JavaScript and the user. We
+        can implement this JavaScript by making a
+        <code>public</code> folder in Express, so that Express can serve
+        that static file to our Handlebars page. Handlebars will be used
+        to render the static elements of the page, and the client-side
+        JavaScript will handle rendering the table and dynamically
+        changing the page based on user input and the responses from the
+        server, via DOM manipulation.
+      </li>
+      <li>
+        <strong>The Database</strong> - You&#39;ll have to work out most
+        of this, but arguably the hardest part is coming to grips with
+        MySQL. That said, we already know that we can use our Express
+        server as a two-in-one server and API, and since
+        <code>express</code> is just a Node plugin much like
+        <code>mysql</code>, we can rest assured that both our goals can
+        be accomplished in the same script.
+      </li>
+    </ol>
+    <h1 id="playing-the-callback-game" class="js-toc-content">
+      Playing the Callback Game
+    </h1>
+    <p>
+      While the 1, 2, 3 of Client, Server, Database is nice, it&#39;s
+      worth examining the relationships here in a less-idealized manner
+      -- one that&#39;s specific to the use-case. For Homework 6,
+      I&#39;d make the argument that there&#39;s actually five players
+      in the game:
+    </p>
+    <p>
+      <strong
+        >User &lt;-&gt; DOM &lt;-&gt; JavaScript &lt;-&gt; API/server
+        &lt;-&gt; Database</strong
+      >
+    </p>
+    <p>
+      I know, real revolutionary stuff. Allow me to break this scenario
+      down into its constituent relationships so you can see what that
+      means:
+    </p>
+    <p><strong>The Relationship...</strong></p>
+    <ul>
+      <li>
+        <strong>Between the user and the DOM.</strong>
+        <ul>
+          <li>
+            The user clicks the buttons and types text, interacting with
+            the
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/API/Document"
+              >Document</a
+            >, and by extension,
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model"
+              >the DOM tree</a
+            >. They&#39;re doing user stuff. Each action performed by
+            the user is a
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/Events"
+              >DOM event</a
+            >.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Between the DOM and JavaScript.</strong>
+        <ul>
+          <li>
+            JavaScript listens for select DOM events via an
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener"
+              >event listener</a
+            >. JavaScript has these event listeners tied to an
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous/Introducing#Async_callbacks"
+              >asynchronous callback function</a
+            >
+            that&#39;s triggered when the event occurs.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Between the JavaScript and the API/server.</strong>
+        <ul>
+          <li>
+            A callback is triggered, and JavaScript communicates the
+            meaning of this event to the API/server using an
+            asynchronous HTTP request object, like
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest"
+              >XMLHttpRequest</a
+            >, or
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"
+              >fetch</a
+            >.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Between the API/server and the database.</strong>
+        <ul>
+          <li>
+            The API/server (for us, an
+            <a
+              href="http://expressjs.com/en/guide/writing-middleware.html"
+              >Express</a
+            >
+            server running on
+            <a href="https://nodejs.org/docs/v6.10.2/api/"
+              >Node.js v6.10.2</a
+            >) communicates the intended change by
+            <a
+              href="https://github.com/mysqljs/mysql#performing-queries"
+              >performing a query</a
+            >
+            using the asynchronous <code>.query()</code> method, which
+            belongs to the active
+            <a
+              href="https://github.com/mysqljs/mysql#pooling-connections"
+              >connection pool</a
+            >
+            (<code>pool</code>) object, which is provided by the
+            <a href="https://github.com/mysqljs/mysql#introduction"
+              >Node.js driver for MySQL</a
+            >
+            (<code>mysql</code>). That&#39;s where
+            <code>mysql.pool.query()</code> comes from. The
+            <code>.query()</code> method takes one of these two forms,
+            both of which accept an asynchronous callback function:
+            <ul>
+              <li><code>.query(sqlString, callback)</code></li>
+              <li><code>.query(sqlString, values, callback)</code></li>
+            </ul>
+          </li>
+          <li>
+            Once the database has completed (or failed) the operation,
+            the callback is triggered and the details of the transaction
+            (<code>error</code>, <code>results</code>,
+            <code>fields</code>) are issued to the callback function as
+            parameters (<a
+              href="https://github.com/mysqljs/mysql#performing-queries"
+              >see here, again</a
+            >). The server now has confirmation and evidence of that
+            transaction, and the process repeats in the opposite
+            direction, as far as it needs to go to be of use, sometimes
+            all the way back to the user.
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <p>
+      The idea of asynchronous callbacks and the uncertainty that comes
+      with them may seem chaotic at first, but if you think about it,
+      it&#39;s not. At least not in the sense that you&#39;re
+      responsible for, in terms of HW 6. It&#39;s a straight line back
+      and forth, with a little bit of waiting in-between. The next step
+      can&#39;t happen until the current step is finished, and the next
+      step waits patiently by the telephone until it gets a callback.
+    </p>
+    <h4 id="a-look-at-your-future-nested-asynchronous-functions">
+      A Look at Your Future: Nested Asynchronous Functions
+    </h4>
+    <p>
+      I&#39;m going to include one of the <code>mysql</code> queries
+      from
+      <a
+        href="https://eecs.oregonstate.edu/ecampus-video/CS290/core-content/node-mysql/using-server-sql.html"
+        >Using Node with MySQL
+      </a>
+      here, but only for the sake of reiterating a point that tends to
+      trip people up (note that while the below handler is for
+      <code>/safe-update</code>, you can only have
+      <strong>one</strong> route in your program. That is, except for
+      <code>reset-table</code>, because that&#39;s a big time saver):
+    </p>
+    <pre><code><span class="hljs-keyword">app</span>.<span class="hljs-built_in">get</span>('/safe-<span class="hljs-keyword">update</span>',function(req,res,next){
+  <span class="hljs-keyword">var</span>  context  = {};
+  mysql.pool.<span class="hljs-keyword">query</span>(<span class="hljs-string">"SELECT * FROM todo WHERE id=?"</span>,  [req.<span class="hljs-keyword">query</span>.id], 
+      function(<span class="hljs-keyword">err</span>,result){
+      <span class="hljs-keyword">if</span>(<span class="hljs-keyword">err</span>){
+          next(<span class="hljs-keyword">err</span>);
+          <span class="hljs-keyword">return</span>;
+      }
+      <span class="hljs-keyword">if</span>(result.length  ==  1){
+          <span class="hljs-keyword">var</span> curVals = result[0];
+          mysql.pool.<span class="hljs-keyword">query</span>(<span class="hljs-string">"UPDATE todo SET name=?, done=?, due=? WHERE id=? "</span>,
+              [req.<span class="hljs-keyword">query</span>.name  ||  curVals.name,  req.<span class="hljs-keyword">query</span>.done  ||
+              curVals.done, req.<span class="hljs-keyword">query</span>.due || curVals.due,  req.<span class="hljs-keyword">query</span>.id],
+              function(<span class="hljs-keyword">err</span>,  result){
+                  <span class="hljs-keyword">if</span>(<span class="hljs-keyword">err</span>){
+                      next(<span class="hljs-keyword">err</span>);
+                      <span class="hljs-keyword">return</span>;
+                  }
+                  context.results  =  <span class="hljs-string">"Updated "</span>  +  result.changedRows  +  
+                              <span class="hljs-string">"rows."</span>;
+                  res.render('home', context);
+              });
+      }
+  });
+
+});
+</code></pre>
+    <p>
+      What is <em>that</em>? If you&#39;re confused about the
+      <code>mysql.pool.query</code> part, see the section just above
+      this. The makers of Node&#39;s <code>mysql</code> connector also
+      <a href="https://www.npmjs.com/package/mysql#performing-queries"
+        >wrote a manual</a
+      >
+      for their plugin. If you&#39;re confused about the query itself,
+      see
+      <a
+        href="https://eecs.oregonstate.edu/ecampus-video/CS290/core-content/node-mysql/basic-sql.html"
+        >Basic SQL</a
+      >
+      or the module linked in the paragraph above the code block --
+      anyway,
+      <strong
+        >What I&#39;m pointing out is how the mysql function calls are
+        nested here</strong
+      >.
+    </p>
+    <p>
+      This is because <code>mysql</code> is making an asynchronous call
+      to our database, and because the second call depends upon the
+      first, that second call has to go inside the callback to the first
+      one. Only after the second query has been made, and the callback
+      for that second query is triggered, do we call
+      <code>res.render</code> and hand things over to Handlebars.
+    </p>
+    <p>
+      If, instead, the two asynchronous calls were next to each other
+      (running sequentially, but with no accounting for their
+      asynchronicity), like in this <strong>incorrect example</strong>:
+    </p>
+    <pre><code>mysql.pool.<span class="hljs-keyword">query</span>(<span class="hljs-string">"SELECT * FROM todo WHERE id=?"</span>,  [req.<span class="hljs-keyword">query</span>.id],  function(<span class="hljs-keyword">err</span>,  result){
+  <span class="hljs-keyword">if</span>(<span class="hljs-keyword">err</span>){
+      next(<span class="hljs-keyword">err</span>);
+      <span class="hljs-keyword">return</span>;
+  }
+}); <span class="hljs-comment">// end of first query</span>
+
+<span class="hljs-keyword">if</span>(result.length  ==  1){     <span class="hljs-comment">// check result of first query?</span>
+  <span class="hljs-keyword">var</span>  curVals  =  result[0];
+  <span class="hljs-comment">// make second query</span>
+  mysql.pool.<span class="hljs-keyword">query</span>(<span class="hljs-string">"UPDATE todo SET name=?, done=?, due=? WHERE id=? "</span>,
+      [req.<span class="hljs-keyword">query</span>.name  ||  curVals.name,  req.<span class="hljs-keyword">query</span>.done  ||  curVals.done,  
+          req.<span class="hljs-keyword">query</span>.due ||  curVals.due,  req.<span class="hljs-keyword">query</span>.id],
+      function(<span class="hljs-keyword">err</span>,  result){
+          <span class="hljs-keyword">if</span>(<span class="hljs-keyword">err</span>){
+          next(<span class="hljs-keyword">err</span>);
+          <span class="hljs-keyword">return</span>;
+      }
+      context.results  =  <span class="hljs-string">"Updated "</span>  +  result.changedRows  +  <span class="hljs-string">" rows."</span>;
+      res.render('home',context);
+  });
+}
+</code></pre>
+    <p>
+      We&#39;d get an error saying something like
+      <code>result.length is undefined</code>. Which makes sense,
+      because the code that comes after the first query vitally depends
+      on the results of that query to execute. Now think about if we had
+      an entire <em>rest of the program</em> that came after that query?
+      Well, that would have to be in that query&#39;s callback, too.
+      This happens all the time, and it gets to be a mess -- that&#39;s
+      why we have
+      <a
+        href="https://eecs.oregonstate.edu/ecampus-video/CS290/core-content/promises/promises.html"
+        >Promises</a
+      >.
+    </p>
+    <h2 id="what-s-next-">What&#39;s next?</h2>
+    <p>
+      Unfortunately I can only bring you the tip of the adviceberg, and
+      you&#39;ll have to look back at some of the class material in
+      order to learn everything you need to complete the bulk of the
+      assignment. This was just a quick glance at some things that get
+      overlooked, and an answer to the anxiety from students regarding
+      where to start. Beyond the database material, and the fact that
+      this project is more complex than previous assignments, this is
+      all made of the same stuff we&#39;ve been working on.
+    </p>
+    <h3 id="where-to-go-from-here">Where to go from here</h3>
+    <h4 id="mysql">MySQL</h4>
+    <p>
+      Review the sections on SQL:
+      <a
+        href="https://eecs.oregonstate.edu/ecampus-video/CS290/core-content/node-mysql/db-intro.html"
+        >Database Basics</a
+      >,
+      <a
+        href="https://eecs.oregonstate.edu/ecampus-video/CS290/core-content/node-mysql/basic-sql.html"
+        >Basic SQL</a
+      >, and
+      <a
+        href="https://eecs.oregonstate.edu/ecampus-video/CS290/core-content/node-mysql/using-server-sql.html"
+        >Using SQL with Node</a
+      >. The <code>helloMysql</code> example from
+      <a href="https://github.com/wolfordj/CS290-Server-Side-Examples"
+        >CS290-Server-Side-Examples</a
+      >
+      is an excellent way to get acquianted with how these operations
+      are going to look.
+    </p>
+    <h4 id="promises">Promises</h4>
+    <p>
+      Once you&#39;re in the nitty-gritty of making asynchronous
+      database calls inside of the callbacks of other asynchronous
+      database calls, you should review the section on
+      <a
+        href="https://eecs.oregonstate.edu/ecampus-video/CS290/core-content/promises/promises.html"
+        >Promises</a
+      >. It&#39;ll make your life much easier.
+      <a
+        href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises"
+        >MDN also has a great introduction to Promises</a
+      >.
+    </p>
+    <h4
+      id="remember-console-log-and-your-browser-s-developer-tools-are-your-friends"
+    >
+      Remember, <code>console.log</code> and your browser&#39;s
+      developer tools are your friends
+    </h4>
+    <p>
+      If you run into trouble, <code>console.log</code> is there to help
+      you discover the problem. Take full advantage of the console in
+      both Node.js (for problems with Express) and your browser (for
+      client-side issues). If an API call goes wrong, use the console
+      <em>on both sides of the issue</em>. See what got lost along the
+      way, and adapt accordingly. You can
+      <code>console.log</code> anything you like (so long as it&#39;s
+      JavaScript), so do it! It&#39;s the best way to learn about what
+      you&#39;re working with, and the best way to get yourself out of a
+      bind. <code>console.log</code> one of your <code>req</code>s if
+      you&#39;re curious what&#39;s in there, or even
+      <code>console.log(console)</code>, I can&#39;t stop you.
+    </p>
+    <p>
+      In your browser&#39;s developer tools, scan the Network tab if
+      you&#39;re wondering why your static files aren&#39;t showing up,
+      or why your calls to the server aren&#39;t going through. Use the
+      Debugger to go through the call stack, if that&#39;s your thing.
+    </p>
+    <h4
+      id="if-you-re-working-locally-use-a-package-json-file-that-you-know-will-work-with-the-version-of-node-js-on-the-flip-servers-"
+    >
+      If you&#39;re working locally, use a
+      <code>package.json</code> file that you know will work with the
+      version of Node.js on the flip servers.
+    </h4>
+    <p>
+      The safest way to avoid confusing errors that have nothing to do
+      with your project is by using a <code>package.json</code> file
+      that you know will work. <strong>Hint:</strong> the
+      <a href="https://github.com/wolfordj/CS290-Server-Side-Examples"
+        >CS290-Server-Side-Examples repository</a
+      >
+      is a good place to find one.
+    </p>
+    <h3 id="you-got-this-">You got this!</h3>
+    <p>
+      Remember that while some of this stuff is new, most of it is not.
+      You can always go back and look at past assignments to gain
+      insight on how to
+      <a
+        href="https://oregonstate.instructure.com/courses/1776069/assignments/7956376?module_item_id=19703168"
+        >display a table based on information from the server</a
+      >, and
+      <a
+        href="https://oregonstate.instructure.com/courses/1776069/assignments/7956375?module_item_id=19703161"
+        >work with the DOM</a
+      >, and
+      <a
+        href="https://oregonstate.instructure.com/courses/1776069/assignments/7956369?module_item_id=19703164"
+        >use the DOM to update a page after receiving a response from an
+        asynchronous HTTP operation</a
+      >. The requirements for this assignment were carefully laid out to
+      make it a cumulative show of understanding, so take full advantage
+      of what you&#39;ve learned so far to make this assignment a winner
+      -- just like you!
+    </p>
+    <p>#pin</p>
+  </div>
+</div>
+</div>
+</div>
+<script
+src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+crossorigin="anonymous"
+></script>
+<script
+src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+crossorigin="anonymous"
+></script>
+<script
+src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+crossorigin="anonymous"
+></script>
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"
+integrity="sha512-tHQeqtcNWlZtEh8As/4MmZ5qpy0wj04svWFK7MIzLmUVIzaHXS8eod9OmHxyBL1UET5Rchvw7Ih4ZDv5JojZww=="
+crossorigin="anonymous"
+></script>
+<script>
+hljs.initHighlightingOnLoad();
+</script>
+<script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script>
+<script>
+$("body").scrollspy({
+target: "#toc",
+offset: 40,
+});
+</script>
+</body>
+</html>
