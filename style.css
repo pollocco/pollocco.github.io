@@ -1,7 +1,7 @@
 
 pre{
     border: 1px solid rgba(255, 177, 169, 0.74);
-    overflow-x:visible;
+    overflow-x:visible !important;
 }
 
 h1{
