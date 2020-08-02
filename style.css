@@ -1,7 +1,6 @@
 
 pre{
-    border: 4px solid salmon;
-    border-radius: 8px;
+    border: 1px solid rgba(255, 177, 169, 0.74);
     overflow-x:visible;
 }
 

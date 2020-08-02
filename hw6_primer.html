@@ -20,13 +20,8 @@ crossorigin="anonymous"
 rel="stylesheet"
 href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css"
 />
-<!--Tomorrow Night Eighties theme for highlight.js-->
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/tomorrow-night-eighties.min.css"
-integrity="sha512-P1mgxhtj4xaZLIayPCEZrkFH/CsdeVvax90YG1aKpJHj0iZdKDIP6TUd1/OJitWMJScXecspQ0UGzO6dEq5IaQ=="
-crossorigin="anonymous"
-/>
+<!--Tomorrow theme for highlight.js-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/tomorrow.min.css" integrity="sha512-Uw7K7aQ4lqcUVvnUvFZTKOp15o2G7Nf7XZEYuPx6A4VPNPI/gIJjViRW/PswhtB/KAHWuCid8SZgpBHrLE1eFw==" crossorigin="anonymous" />
 <!--Boostrap Table of Contents plugin https://afeld.github.io/bootstrap-toc/-->
 <link
 rel="stylesheet"
@@ -121,7 +116,7 @@ padding: 45px;
       >
     </p>
     <h2 id="initial-setup">Initial Setup</h2>
-    <pre><code><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>); <span class="hljs-comment">// Our Express package, that we got from NPM</span>
+    <pre><code class="language-js"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>); <span class="hljs-comment">// Our Express package, that we got from NPM</span>
 <span class="hljs-keyword">var</span> mysql = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./dbcon.js'</span>); <span class="hljs-comment">// Our database login </span>
 <span class="hljs-keyword">var</span> bodyParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'body-parser'</span>); <span class="hljs-comment">// body-parser parses the body of POST requests</span>
 </code></pre>
@@ -130,10 +125,10 @@ padding: 45px;
       seen here, they can either be NPM packages, or they can be scripts
       of our own, like <code>dbcon.js</code>.
     </p>
-    <pre><code><span class="hljs-attribute">var app</span> = express();
+    <pre><code class="language-js"><span class="hljs-attribute">var app</span> = express();
 </code></pre>
     <p>This initializes the Express server.</p>
-    <pre><code><span class="hljs-attribute">var handlebars</span> = require(<span class="hljs-string">'express-handlebars'</span>).create({defaultLayout:<span class="hljs-string">'main'</span>});
+    <pre><code class="language-js"><span class="hljs-attribute">var handlebars</span> = require(<span class="hljs-string">'express-handlebars'</span>).create({defaultLayout:<span class="hljs-string">'main'</span>});
 </code></pre>
     <p>
       Above, we import Express-Handlebars (for our purposes,
@@ -200,11 +195,11 @@ padding: 45px;
       These two lines set our templating engine to Handlebars, and our
       view engine as well:
     </p>
-    <pre><code><span class="hljs-selector-tag">app</span><span class="hljs-selector-class">.engine</span>(<span class="hljs-string">'handlebars'</span>, handlebars.engine);
+    <pre><code class="language-js"><span class="hljs-selector-tag">app</span><span class="hljs-selector-class">.engine</span>(<span class="hljs-string">'handlebars'</span>, handlebars.engine);
 <span class="hljs-selector-tag">app</span><span class="hljs-selector-class">.set</span>(<span class="hljs-string">'view engine'</span>, <span class="hljs-string">'handlebars'</span>);
 </code></pre>
     <h4 id="setting-the-port">Setting the Port</h4>
-    <pre><code>app.set(<span class="hljs-string">'port'</span>, <span class="hljs-built_in">process</span>.argv[<span class="hljs-number">2</span>]);
+    <pre><code class="language-js">app.set(<span class="hljs-string">'port'</span>, <span class="hljs-built_in">process</span>.argv[<span class="hljs-number">2</span>]);
 </code></pre>
     <p>
       This determines which port our server will run on. Here, the port
@@ -219,7 +214,7 @@ padding: 45px;
       Now we can start writing our routes. Here&#39;s an example route
       for GET:
     </p>
-    <pre><code>app.get(<span class="hljs-string">'/'</span>,function(req, res, next){ 
+    <pre><code class="language-js">app.get(<span class="hljs-string">'/'</span>,function(req, res, next){ 
   var <span class="hljs-built_in">context</span>  = {}<span class="hljs-comment">;</span>
   <span class="hljs-built_in">context</span>.hello  =  <span class="hljs-string">"Welcome to Wayne's World!"</span><span class="hljs-comment">;</span>
   res.render(<span class="hljs-string">'home'</span>,  <span class="hljs-built_in">context</span>)<span class="hljs-comment">;</span>
@@ -273,7 +268,7 @@ padding: 45px;
     </p>
     <h5 id="post-request">POST Request</h5>
     <p>All right, now we can look at an example route for POST:</p>
-    <pre><code>app.post(<span class="hljs-string">'/'</span>,  <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span></span>{ 
+    <pre><code class="language-js">app.post(<span class="hljs-string">'/'</span>,  <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res, next)</span></span>{ 
   <span class="hljs-keyword">if</span>(req.body.wayne){
       <span class="hljs-keyword">var</span> wayne = req.body.wayne
       res.send(<span class="hljs-string">"Party on Garth!"</span>)
@@ -312,7 +307,7 @@ padding: 45px;
       >
     </p>
     <h4 id="error-handlers">Error Handlers</h4>
-    <pre><code>app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req,res)</span></span>{ 
+    <pre><code class="language-js">app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req,res)</span></span>{ 
   res.<span class="hljs-keyword">status</span>(<span class="hljs-number">404</span>);
   res.render(<span class="hljs-string">'404'</span>);
 });
@@ -335,7 +330,7 @@ app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span clas
     </p>
     <h4 id="starting-the-server">Starting the Server</h4>
     <p>All right, now we&#39;re at the <em>very</em> end:</p>
-    <pre><code>app.listen(app.<span class="hljs-keyword">get</span>(<span class="hljs-string">'port'</span>),  <span class="hljs-function"><span class="hljs-keyword">function</span></span>(){
+    <pre><code class="language-js">app.listen(app.<span class="hljs-keyword">get</span>(<span class="hljs-string">'port'</span>),  <span class="hljs-function"><span class="hljs-keyword">function</span></span>(){
   console.log(<span class="hljs-string">'Express started on http://localhost:'</span>  +  app.<span class="hljs-keyword">get</span>(<span class="hljs-string">'port'</span>)  +  
   <span class="hljs-string">'; press Ctrl-C to terminate.'</span>);
 });
@@ -347,7 +342,7 @@ app.<span class="hljs-keyword">use</span>(<span class="hljs-function"><span clas
       it a day.
     </p>
     <h2 id="full-boilerplate-example">Full Boilerplate Example</h2>
-    <pre><code><span class="hljs-comment">// INITIAL SETUP</span>
+    <pre><code class="language-js"><span class="hljs-comment">// INITIAL SETUP</span>
 <span class="hljs-keyword">var</span>  express  =  <span class="hljs-keyword">require</span>(<span class="hljs-string">'express'</span>);        <span class="hljs-comment">// Our Express package, that we got from NPM</span>
 <span class="hljs-keyword">var</span>  mysql  =  <span class="hljs-keyword">require</span>(<span class="hljs-string">'./dbcon.js'</span>);       <span class="hljs-comment">// Our database login </span>
 <span class="hljs-keyword">var</span>  bodyParser  =  <span class="hljs-keyword">require</span>(<span class="hljs-string">'body-parser'</span>);     <span class="hljs-comment">// body-parser parses the body of POST requests</span>
@@ -444,7 +439,7 @@ app.listen(app.get(<span class="hljs-string">'port'</span>),  <span class="hljs-
       <strong>which leads us to a common pitfall</strong>:
     </p>
     <p>This is <strong>not</strong> asynchronous JavaScript:</p>
-    <pre><code><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> XMLHttpRequest();
+    <pre><code class="language-js"><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> XMLHttpRequest();
 req.open(<span class="hljs-string">"GET"</span>, <span class="hljs-string">"/"</span>, <span class="hljs-literal">false</span>);
 req.send(<span class="hljs-literal">null</span>);
 <span class="hljs-keyword">if</span>(req.status &gt;= <span class="hljs-number">200</span> &amp;&amp; req.status &lt; <span class="hljs-number">400</span>){
@@ -463,7 +458,7 @@ req.send(<span class="hljs-literal">null</span>);
       experience, and almost all website don&#39;t do this anymore.
     </p>
     <p>This is <strong>also not</strong> asynchronous JavaScript:</p>
-    <pre><code><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> XMLHttpRequest();
+    <pre><code class="language-js"><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> XMLHttpRequest();
 req.open(<span class="hljs-string">"GET"</span>,<span class="hljs-string">"/"</span>, <span class="hljs-literal">false</span>);       <span class="hljs-comment">// async == false</span>
 req.send(<span class="hljs-literal">null</span>)                    <span class="hljs-comment">// request is sent before callback is attached</span>
 req.addEventListener(<span class="hljs-string">"load"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
@@ -492,7 +487,7 @@ req.addEventListener(<span class="hljs-string">"load"</span>, <span class="hljs-
       This, finally, is a <strong>correct way</strong> of using
       asynchronous JavaScript:
     </p>
-    <pre><code><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> XMLHttpRequest();
+    <pre><code class="language-js"><span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> XMLHttpRequest();
 req.open(<span class="hljs-string">"GET"</span>,<span class="hljs-string">"/"</span>, <span class="hljs-literal">true</span>);       <span class="hljs-comment">// async == true</span>
 req.addEventListener(<span class="hljs-string">"load"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
   <span class="hljs-keyword">if</span>(req.status &gt;= <span class="hljs-number">200</span> &amp;&amp; req.status &lt; <span class="hljs-number">400</span>){
@@ -596,7 +591,7 @@ req.send(<span class="hljs-literal">null</span>);    <span class="hljs-comment">
         error</strong
       >. Here&#39;s an example of both of those requirements:
     </p>
-    <pre><code>req.open(<span class="hljs-string">"POST"</span>,  <span class="hljs-string">"/"</span>);               <span class="hljs-comment">// open up a POST request to my Express server</span>
+    <pre><code class="language-js">req.open(<span class="hljs-string">"POST"</span>,  <span class="hljs-string">"/"</span>);               <span class="hljs-comment">// open up a POST request to my Express server</span>
 req.setRequestHeader(<span class="hljs-string">'Content-Type'</span>,  <span class="hljs-string">'application/json'</span>); <span class="hljs-comment">// set Content-Type header to JSON</span>
 req.addEventListener(<span class="hljs-string">'load'</span>,  <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{                  <span class="hljs-comment">// callback function</span>
   <span class="hljs-keyword">if</span>(req.status  &gt;=  <span class="hljs-number">200</span>  &amp;&amp;  req.status  &lt;  <span class="hljs-number">400</span>){
@@ -804,7 +799,7 @@ req.send(<span class="hljs-built_in">JSON</span>.stringify(jsonObj));   <span cl
       <strong>one</strong> route in your program. That is, except for
       <code>reset-table</code>, because that&#39;s a big time saver):
     </p>
-    <pre><code><span class="hljs-keyword">app</span>.<span class="hljs-built_in">get</span>('/safe-<span class="hljs-keyword">update</span>',function(req,res,next){
+    <pre><code class="language-js"><span class="hljs-keyword">app</span>.<span class="hljs-built_in">get</span>('/safe-<span class="hljs-keyword">update</span>',function(req,res,next){
   <span class="hljs-keyword">var</span>  context  = {};
   mysql.pool.<span class="hljs-keyword">query</span>(<span class="hljs-string">"SELECT * FROM todo WHERE id=?"</span>,  [req.<span class="hljs-keyword">query</span>.id], 
       function(<span class="hljs-keyword">err</span>,result){
@@ -864,7 +859,7 @@ req.send(<span class="hljs-built_in">JSON</span>.stringify(jsonObj));   <span cl
       (running sequentially, but with no accounting for their
       asynchronicity), like in this <strong>incorrect example</strong>:
     </p>
-    <pre><code>mysql.pool.<span class="hljs-keyword">query</span>(<span class="hljs-string">"SELECT * FROM todo WHERE id=?"</span>,  [req.<span class="hljs-keyword">query</span>.id],  function(<span class="hljs-keyword">err</span>,  result){
+    <pre><code class="language-js">mysql.pool.<span class="hljs-keyword">query</span>(<span class="hljs-string">"SELECT * FROM todo WHERE id=?"</span>,  [req.<span class="hljs-keyword">query</span>.id],  function(<span class="hljs-keyword">err</span>,  result){
   <span class="hljs-keyword">if</span>(<span class="hljs-keyword">err</span>){
       next(<span class="hljs-keyword">err</span>);
       <span class="hljs-keyword">return</span>;
