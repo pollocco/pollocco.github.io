@@ -28,7 +28,7 @@ li{
 }
 
 .hljs-attribute, .hljs-doctag, .hljs-keyword, .hljs-meta-keyword, .hljs-name, .hljs-selector-tag {
-	font-weight: normal; 
+	font-weight: normal !important; 
 }
 
 nav[data-toggle="toc"] .nav-link.active, nav[data-toggle="toc"] .nav-link.active:focus, nav[data-toggle="toc"] .nav-link.active:hover {
