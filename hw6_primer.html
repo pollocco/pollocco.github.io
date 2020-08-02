@@ -284,7 +284,6 @@ padding: 45px;
   <span class="hljs-keyword">if</span>(req.body.garth == "Party on Wayne!"){
       <span class="hljs-keyword">var</span> garth = req.body.garth;
       res.status(200).send(<span class="hljs-string">"Party on Garth!"</span>);
-      goToBasement(garth);
   } <span class="hljs-keyword">else</span> {
       res.status(403).send(<span class="hljs-string">"No Stairway! Denied!"</span>);
   }
@@ -395,7 +394,6 @@ app.post(<span class="hljs-string">'/'</span>,  <span class="hljs-function"><spa
   <span class="hljs-keyword">if</span>(req.body.garth == "Party on Wayne!"){
       <span class="hljs-keyword">var</span> garth = req.body.garth;
       res.status(200).send(<span class="hljs-string">"Party on Garth!"</span>);
-      goToBasement(garth);
   } <span class="hljs-keyword">else</span> {
       res.status(403).send(<span class="hljs-string">"No Stairway! Denied!"</span>);
   }
@@ -421,6 +419,9 @@ app.listen(app.get(<span class="hljs-string">'port'</span>),  <span class="hljs-
   <span class="hljs-string">'; press Ctrl-C to terminate.'</span>);
 });
 </code></pre>
+<p><b>Note that, in this example, there's a handful of things missing that will
+  prevent successful execution from simply copying and running it.</b> This example is for illustrative purposes only.
+</p>
     <h1
       id="another-look-at-asynchronous-operations"
       class="js-toc-content"
