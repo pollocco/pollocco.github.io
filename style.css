@@ -27,6 +27,10 @@ li{
     color: rgb(91, 91, 209);
 }
 
+.hljs-attribute, .hljs-doctag, .hljs-keyword, .hljs-meta-keyword, .hljs-name, .hljs-selector-tag {
+	font-weight: normal; 
+}
+
 nav[data-toggle="toc"] .nav-link.active, nav[data-toggle="toc"] .nav-link.active:focus, nav[data-toggle="toc"] .nav-link.active:hover {
 	padding-left: 18px;
 	font-weight: 700;
