@@ -299,10 +299,10 @@ padding: 45px;
       <code>req.body</code>. That&#39;s what the client sent our Express
       server in their POST request, and it&#39;s all parsed and ready to
       go thanks to <code>bodyParser</code>. The specific variables sent
-      to us in the POST request, such as <code>wayne</code>, are
+      to us in the POST request, such as <code>garth</code>, are
       available to us as properties of <code>req.body</code>, so we can
-      access them as such, using <code>req.body.wayne</code>, or,
-      alternatively, <code>req.body[&quot;wayne&quot;]</code>.
+      access them as such, using <code>req.body.garth</code>, or,
+      alternatively, <code>req.body[&quot;garth&quot;]</code>.
     </p>
     <p>
       We also have <code>req.send</code>, which according to the
@@ -311,6 +311,9 @@ padding: 45px;
       >, can be used to send &quot;a <code>Buffer</code> object, a
       <code>String</code>, an object, or an <code>Array</code>.&quot;
       This is how we&#39;ll send information back to the client.
+      Note that including an HTTP status with <code>status</code>
+      is optional, and it also works to simply use <code>res.send</code>
+      to transfer information between the server and the client.
     </p>
     <h2 id="error-handlers-and-server-launch">Error Handlers and Server Launch</h2>
     <p>
