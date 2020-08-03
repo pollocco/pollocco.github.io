@@ -419,8 +419,14 @@ app.listen(app.get(<span class="hljs-string">'port'</span>),  <span class="hljs-
   <span class="hljs-string">'; press Ctrl-C to terminate.'</span>);
 });
 </code></pre>
-<p><b>Note that, in this example, there's a handful of things missing that will
-  prevent successful execution from simply copying and running it.</b> This example is for illustrative purposes only.
+<p><b>Note that, in this example, there's a few things missing that will
+  prevent successful execution if you simply copy, paste and try to run it.</b> The dependencies listed at the top 
+  have to be installed using NPM (<code>express</code>, <code>express-handlebars</code>, 
+  <code>body-parser</code>, and <code>mysql</code> -- this last one should be imported in your <code>dbcon.js</code>).
+  Your file tree must also be set up according to the structure we've used in Express apps thus far. 
+  Take a look at CS290-Server-Side-Examples-master's <a href="https://github.com/luyaozh/CS290/tree/master/CS290-Server-Side-Examples-master/express-mysql">
+  hellomysql</a> app for a fully realized example of what the preceeding describes.
+  <code></code>
 </p>
     <h1
       id="another-look-at-asynchronous-operations"
