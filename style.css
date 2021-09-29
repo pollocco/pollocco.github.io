@@ -38,11 +38,10 @@ body{
 
 h1{
   color:rgb(212, 91, 47);
-  display: flex;
 }
 
 #books{
-  max-width:1em;
+  display: inline-block; height: 1.2em; vertical-align: text-bottom;
 }
 
 a{
