@@ -149,13 +149,13 @@
 		</div>
 	</div>
 	<script>
+		console.log("Hey! Thanks for visiting! ⭐️");
 		var images = document.getElementsByClassName('project-image');
 		for(i=0;i<images.length;i++){
 			images[i].addEventListener('click', zoom);
 		}
 		function zoom(event){
 			var img = event.target;
-			console.log(img.style.maxHeight)
 			if(img.style.maxHeight == "180px" || img.style.maxHeight == ""){
 				img.style.maxHeight = "400px";
 			} else {
