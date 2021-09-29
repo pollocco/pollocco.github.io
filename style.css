@@ -1,6 +1,10 @@
 body{
   font-family: -apple-system, BlinkMacSystemFont, Ubuntu, 'Segoe UI', Roboto, Oxygen, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  margin-left:2rem;
+  margin-left: 2rem;
+}
+
+.container{
+  max-width: 1200px;
 }
 
 .project-container{
@@ -34,6 +38,11 @@ body{
 
 h1{
   color:rgb(212, 91, 47);
+  display: flex;
+}
+
+#books{
+  max-width:1em;
 }
 
 a{
