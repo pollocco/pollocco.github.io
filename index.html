@@ -183,7 +183,8 @@
 		function zoom(event){
 			var img = event.target;
 			if(img.style.maxHeight == "180px" || img.style.maxHeight == ""){
-				img.style.maxHeight = "400px";
+				img.style.maxHeight = "600px";
+				img.style.maxWidth = "90%";
 				img.className = "project-image-zoomed";
 			} else {
 				img.style.maxHeight = "180px";
