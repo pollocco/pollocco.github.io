@@ -24,8 +24,11 @@ body{
   max-height: 180px;
   padding: 0.5rem;
   filter: drop-shadow(0 0.3rem 0.2rem rgb(90, 90, 90));
-  transition: max-height 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95);
-  
+  transition: max-height 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95); 
+}
+
+.project-image:hover{
+  cursor: pointer;
 }
 
 .project-images{
