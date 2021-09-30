@@ -184,8 +184,10 @@
 			var img = event.target;
 			if(img.style.maxHeight == "180px" || img.style.maxHeight == ""){
 				img.style.maxHeight = "400px";
+				img.className = "project-image-zoomed";
 			} else {
 				img.style.maxHeight = "180px";
+				img.className = "project-image";
 			}
 		}
 	</script>
