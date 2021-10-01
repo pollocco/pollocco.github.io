@@ -3,6 +3,18 @@ body{
   margin-left: 2rem;
 }
 
+#resume-email{
+  display: flex;
+  align-items: center;
+  margin-left: 2px;
+}
+
+.small-sep{
+  color:rgb(211, 151, 23);
+
+  font-size: 150%
+}
+
 .container{
   max-width: 1200px;
 }
@@ -51,6 +63,10 @@ body{
 
 h1{
   color:rgb(212, 91, 47);
+}
+
+.title{
+  margin-bottom: 8px;
 }
 
 #books{
